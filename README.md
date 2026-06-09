@@ -3,9 +3,9 @@
 Proof-of-concept repository for new methods of collecting and analysing
 distributed traces in distributed applications.
 
-At this stage the repository is intentionally minimal. It contains the upstream
-DeathStarBench repository as a pinned git submodule and this README. The first
-planned experiment target is **DeathStarBench Social Network**.
+At this stage the repository is intentionally minimal. It contains a pinned fork of 
+the upstream DeathStarBench repository as a git submodule. The fork is used to keep 
+a small compatibility fix for Jaeger tracing in the Social Network benchmark.
 
 ## Current Scope
 
@@ -16,7 +16,7 @@ Why Social Network first:
 - it is already available in DeathStarBench;
 - it contains multiple microservices, Nginx/OpenResty, MongoDB, Redis, and
   Memcached;
-- it already includes Jaeger tracing in the upstream Docker Compose setup;
+- it already includes Jaeger tracing in the DeathStarBench Docker Compose setup;
 - it has ready workload scripts for common user actions.
 
 Other DeathStarBench applications, such as Hotel Reservation, should be added
@@ -26,7 +26,7 @@ only later as a validation step after the Social Network workflow is clear.
 
 ```text
 .
-├── DeathStarBench/   # pinned upstream submodule
+├── DeathStarBench/   # pinned DeathStarBench fork submodule
 ├── .gitmodules       # submodule definition
 └── README.md         # project setup and plan
 ```
@@ -36,14 +36,16 @@ only later as a validation step after the Social Network workflow is clear.
 Pinned submodule commit:
 
 ```text
-6ecb09706140f8730b5385c08f1386c654c3c526
+4fba28cb3b454259d005794608c5204cf8aef461
 ```
 
 Submodule source:
 
 ```text
-https://github.com/delimitrou/DeathStarBench.git
+https://github.com/Redor144/DeathStarBench.git
 ```
+This fork pins the Jaeger all-in-one Docker image to jaegertracing/all-in-one:1.62.0,
+because using latest may result in missing Social Network services in Jaeger UI.
 
 ## Requirements
 
@@ -86,7 +88,7 @@ cd ../..
 
 ## Start Social Network
 
-Use the upstream DeathStarBench Docker Compose file:
+Use the Docker Compose file from the pinned DeathStarBench submodule:
 
 ```bash
 cd DeathStarBench/socialNetwork
