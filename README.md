@@ -133,7 +133,7 @@ Compose post:
 ```bash
 ../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L \
   -s ./wrk2/scripts/social-network/compose-post.lua \
-  http://localhost:8080/wrk2-api/post/compose -R 5
+  http://localhost:8080/wrk2-api/post/compose -R 1000
 ```
 
 Read home timeline:
@@ -141,7 +141,7 @@ Read home timeline:
 ```bash
 ../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L \
   -s ./wrk2/scripts/social-network/read-home-timeline.lua \
-  http://localhost:8080/wrk2-api/home-timeline/read -R 5
+  http://localhost:8080/wrk2-api/home-timeline/read -R 1000
 ```
 
 ## Stop the Stack
