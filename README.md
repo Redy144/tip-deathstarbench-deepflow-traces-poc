@@ -27,6 +27,8 @@ only later as a validation step after the Social Network workflow is clear.
 ```text
 .
 ├── DeathStarBench/   # pinned DeathStarBench fork submodule
+├── docs/             # methodology and experiment notes
+├── experiments/      # benchmark scripts and collected results
 ├── .gitmodules       # submodule definition
 └── README.md         # project setup and plan
 ```
@@ -124,25 +126,26 @@ Basic application probe:
 curl 'http://localhost:8080/wrk2-api/home-timeline/read?user_id=0&start=0&stop=10'
 ```
 
-## Manual Smoke Workloads
+## Baseline Experiments
 
-Run these from `DeathStarBench/socialNetwork`.
+The Jaeger-based baseline is documented in:
 
-Compose post:
+- [Baseline methodology](docs/baseline-methodology.md)
+- [Baseline results summary](experiments/results/baseline-jaeger/summary/baseline-summary.md)
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L \
-  -s ./wrk2/scripts/social-network/compose-post.lua \
-  http://localhost:8080/wrk2-api/post/compose -R 1000
+Raw wrk2 outputs are stored in:
+
+```text
+experiments/results/baseline-jaeger/raw/
 ```
 
-Read home timeline:
+Helper scripts are stored in:
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L \
-  -s ./wrk2/scripts/social-network/read-home-timeline.lua \
-  http://localhost:8080/wrk2-api/home-timeline/read -R 1000
+```text
+experiments/scripts/
 ```
+
+Use the methodology document for exact workload commands and selected request rates.
 
 ## Stop the Stack
 
@@ -151,14 +154,21 @@ cd DeathStarBench/socialNetwork
 docker compose down
 ```
 
-## Plan
+## Current Status
 
-1. Confirm that the upstream Social Network stack starts reliably.
-2. Confirm that the social graph initialization and basic workloads work.
-3. Inspect the traces already produced in Jaeger.
-4. Decide what data should be collected from Jaeger for the PoC.
-5. Plan the DeepFlow setup as a second observation method.
-6. Compare Jaeger instrumentation with DeepFlow observation on the same
-   Social Network workloads.
-7. Add another DeathStarBench application only if the Social Network comparison
-   is stable and useful.
+- DeathStarBench Social Network is used as the first PoC target.
+- The repository uses a pinned DeathStarBench fork submodule with Jaeger all-in-one pinned to `1.62.0`.
+- The Social Network stack starts correctly with Docker Compose.
+- The social graph can be initialized with `socfb-Reed98`.
+- A Jaeger-based wrk2 baseline has been collected for selected workloads.
+- Baseline methodology, raw wrk2 outputs, helper scripts, and averaged results are stored in the repository.
+
+## Next Steps
+
+1. Inspect selected traces in Jaeger for the baseline workloads.
+2. Decide which Jaeger trace data should be exported or described in the PoC.
+3. Plan the DeepFlow setup as a second observation method.
+4. Run the same workloads with DeepFlow enabled.
+5. Compare Jaeger instrumentation with DeepFlow-based observation.
+6. Document differences, limitations, and possible next experiments.
+7. Add another DeathStarBench application only if the Social Network comparison is stable and useful.

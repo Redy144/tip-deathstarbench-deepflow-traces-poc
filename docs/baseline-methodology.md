@@ -17,40 +17,60 @@
 
 Main baseline:
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
-  -s ./wrk2/scripts/social-network/compose-post.lua \
-  http://localhost:8080/wrk2-api/post/compose -R 500
-```
+    ../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
+      -s ./wrk2/scripts/social-network/compose-post.lua \
+      http://localhost:8080/wrk2-api/post/compose -R 500
 
 High-load:
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
-  -s ./wrk2/scripts/social-network/compose-post.lua \
-  http://localhost:8080/wrk2-api/post/compose -R 1000
-```
+    ../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
+      -s ./wrk2/scripts/social-network/compose-post.lua \
+      http://localhost:8080/wrk2-api/post/compose -R 1000
 
 ### read-home-timeline
 
 Main baseline:
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
-  -s ./wrk2/scripts/social-network/read-home-timeline.lua \
-  http://localhost:8080/wrk2-api/home-timeline/read -R 600
-```
+    ../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
+      -s ./wrk2/scripts/social-network/read-home-timeline.lua \
+      http://localhost:8080/wrk2-api/home-timeline/read -R 600
 
 Boundary/high-load:
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
-  -s ./wrk2/scripts/social-network/read-home-timeline.lua \
-  http://localhost:8080/wrk2-api/home-timeline/read -R 700
-```
+    ../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L -T 5s \
+      -s ./wrk2/scripts/social-network/read-home-timeline.lua \
+      http://localhost:8080/wrk2-api/home-timeline/read -R 700
+
+## Running helper scripts
+
+Baseline workloads can be executed with helper scripts from the repository root.
+
+Run a single benchmark:
+
+    ./experiments/scripts/run_wrk2_baseline.sh <workload> <rate>
+
+Supported workloads:
+
+    compose-post
+    read-home-timeline
+
+Examples:
+
+    ./experiments/scripts/run_wrk2_baseline.sh compose-post 500
+    ./experiments/scripts/run_wrk2_baseline.sh compose-post 1000
+    ./experiments/scripts/run_wrk2_baseline.sh read-home-timeline 600
+    ./experiments/scripts/run_wrk2_baseline.sh read-home-timeline 700
+
+Raw wrk2 outputs are saved automatically to:
+
+    experiments/results/baseline-jaeger/raw/
+
+After collecting raw results, generate the averaged summary table with:
+
+    python3 experiments/scripts/summarize_wrk2_results.py
 
 ## Current conclusion
 
-compose-post remains stable at R=500 and can handle R=1000, although with higher tail latency.
+`compose-post` remains stable at `R=500` and can handle `R=1000`, although with higher tail latency.
 
-read-home-timeline is stable at R=600, becomes boundary-level at R=700, and shows overload symptoms from R=800 upward.
+`read-home-timeline` is stable at `R=600`, becomes boundary-level at `R=700`, and shows overload symptoms from `R=800` upward.
