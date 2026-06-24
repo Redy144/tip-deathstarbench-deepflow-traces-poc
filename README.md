@@ -3,162 +3,97 @@
 Proof-of-concept repository for new methods of collecting and analysing
 distributed traces in distributed applications.
 
-At this stage the repository is intentionally minimal. It contains a pinned fork of 
-the upstream DeathStarBench repository as a git submodule. The fork is used to keep 
-a small compatibility fix for Jaeger tracing in the Social Network benchmark.
+DeathStarBench Social Network is the benchmark. Jaeger is the current tracing
+baseline. DeepFlow comparison is planned for a later phase.
 
-## Current Scope
-
-For the first PoC we use only `DeathStarBench/socialNetwork`.
-
-Why Social Network first:
-
-- it is already available in DeathStarBench;
-- it contains multiple microservices, Nginx/OpenResty, MongoDB, Redis, and
-  Memcached;
-- it already includes Jaeger tracing in the DeathStarBench Docker Compose setup;
-- it has ready workload scripts for common user actions.
-
-Other DeathStarBench applications, such as Hotel Reservation, should be added
-only later as a validation step after the Social Network workflow is clear.
-
-## Repository Layout
+## Repository layout
 
 ```text
 .
-├── DeathStarBench/   # pinned DeathStarBench fork submodule
-├── .gitmodules       # submodule definition
-└── README.md         # project setup and plan
+├── DeathStarBench/          # pinned submodule (Social Network + wrk2)
+├── docs/                    # methodology and manual trace inspection notes
+├── experiments/
+│   ├── scripts/             # run_wrk2_baseline.sh only
+│   └── results/baseline-jaeger/
+└── README.md
 ```
 
-## DeathStarBench Version
+## DeathStarBench version
 
-Pinned submodule commit:
+Pinned submodule commit: `4fba28cb3b454259d005794608c5204cf8aef461`
 
-```text
-4fba28cb3b454259d005794608c5204cf8aef461
-```
-
-Submodule source:
-
-```text
-https://github.com/Redor144/DeathStarBench.git
-```
-This fork pins the Jaeger all-in-one Docker image to jaegertracing/all-in-one:1.62.0,
-because using latest may result in missing Social Network services in Jaeger UI.
+Fork: [https://github.com/Redor144/DeathStarBench.git](https://github.com/Redor144/DeathStarBench.git) (Jaeger all-in-one pinned to 1.62.0)
 
 ## Requirements
 
-- Docker Desktop or Docker Engine
 - Docker Compose v2
-- Python 3 with `aiohttp`
-- Build tools for wrk2: `make`, `gcc`, `luajit`, `libssl-dev`, `luarocks`,
-  `luasocket`
-
-On Ubuntu-like systems, the local dependencies are roughly:
+- wrk2 build tools: `make`, `gcc`, `luajit`, `libssl-dev`, `luarocks`, `luasocket`
+- Python 3 + `aiohttp` (for `init_social_graph.py` only)
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y make gcc libssl-dev libz-dev luarocks
+sudo apt-get install -y make gcc libssl-dev libz-dev luarocks python3-pip
 sudo luarocks install luasocket
+pip install aiohttp
 ```
 
-## Clone
+## Setup
 
 ```bash
 git clone --recurse-submodules <repo-url>
 cd tip-deathstarbench-deepflow-traces-poc
-```
 
-If the repository was cloned without submodules:
+cd DeathStarBench/wrk2 && make && cd ../..
 
-```bash
-git submodule update --init --recursive
-```
-
-## Build wrk2
-
-DeathStarBench uses wrk2 for workload generation.
-
-```bash
-cd DeathStarBench/wrk2
-make
-cd ../..
-```
-
-## Start Social Network
-
-Use the Docker Compose file from the pinned DeathStarBench submodule:
-
-```bash
 cd DeathStarBench/socialNetwork
 docker compose up -d
-```
-
-Useful URLs:
-
-| Service | URL |
-| --- | --- |
-| Social Network frontend | http://localhost:8080 |
-| Media frontend | http://localhost:8081 |
-| Jaeger UI | http://localhost:16686 |
-
-Basic checks:
-
-```bash
-curl -I http://localhost:8080
-curl http://localhost:16686/api/services
-```
-
-## Initialize Social Graph
-
-Run this once after the stack is up:
-
-```bash
 python3 scripts/init_social_graph.py --graph socfb-Reed98
 ```
 
-Basic application probe:
+## Running benchmarks
+
+Single helper script (wrk2 only):
 
 ```bash
-curl 'http://localhost:8080/wrk2-api/home-timeline/read?user_id=0&start=0&stop=10'
+./experiments/scripts/run_wrk2_baseline.sh compose-post 500
 ```
 
-## Manual Smoke Workloads
+Output: `experiments/results/baseline-jaeger/compose-post_R500/wrk2/run.txt` (overwritten each run).
 
-Run these from `DeathStarBench/socialNetwork`.
+All four benchmark points are defined in [docs/baseline-methodology.md](docs/baseline-methodology.md).
 
-Compose post:
+## Jaeger traces (manual)
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L \
-  -s ./wrk2/scripts/social-network/compose-post.lua \
-  http://localhost:8080/wrk2-api/post/compose -R 1000
+After each wrk2 run, export three traces from Jaeger UI (`http://localhost:16686`) and save JSON to:
+
+```text
+experiments/results/baseline-jaeger/<workload>_R<rate>/traces/
 ```
 
-Read home timeline:
+Document findings in `docs/traces/<workload>_R<rate>.md`.
 
-```bash
-../wrk2/wrk -D exp -t 4 -c 40 -d 60 -L \
-  -s ./wrk2/scripts/social-network/read-home-timeline.lua \
-  http://localhost:8080/wrk2-api/home-timeline/read -R 1000
-```
+## Documentation
 
-## Stop the Stack
+- [Baseline methodology](docs/baseline-methodology.md) — benchmark points, wrk2, manual Jaeger export
+- [Per-workload trace inspection](docs/traces/)
+- [Jaeger findings](docs/jaeger-findings.md)
+- [Comparison methodology (Jaeger vs DeepFlow)](docs/comparison-methodology.md)
+
+## Stop the stack
 
 ```bash
 cd DeathStarBench/socialNetwork
 docker compose down
 ```
 
-## Plan
+## Current status
 
-1. Confirm that the upstream Social Network stack starts reliably.
-2. Confirm that the social graph initialization and basic workloads work.
-3. Inspect the traces already produced in Jaeger.
-4. Decide what data should be collected from Jaeger for the PoC.
-5. Plan the DeepFlow setup as a second observation method.
-6. Compare Jaeger instrumentation with DeepFlow observation on the same
-   Social Network workloads.
-7. Add another DeathStarBench application only if the Social Network comparison
-   is stable and useful.
+- wrk2 baseline: one `run.txt` per benchmark point (2026-06-24 runs)
+- Jaeger traces: 3 JSON files per point in `*/traces/` (shortest, median, longest)
+- `docs/traces/`: filled in with wrk2 metrics and trace interpretation
+- `docs/jaeger-findings.md`: cross-workload synthesis
+
+## Next steps
+
+1. Integrate DeepFlow and repeat the same four benchmark points
+2. Compare Jaeger vs DeepFlow using [comparison-methodology.md](docs/comparison-methodology.md)
+
