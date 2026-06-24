@@ -1,0 +1,146 @@
+# workload=read-home-timeline
+# rate=700
+# threads=4
+# connections=40
+# duration=60
+# timestamp=20260624_221423
+
+Running 1m test @ http://localhost:8080/wrk2-api/home-timeline/read
+  4 threads and 40 connections
+
+  Thread calibration: mean lat.: 1044.298ms, rate sampling interval: 4988ms
+  Thread calibration: mean lat.: 1291.334ms, rate sampling interval: 5775ms
+  Thread calibration: mean lat.: 977.771ms, rate sampling interval: 4718ms
+  Thread calibration: mean lat.: 1095.378ms, rate sampling interval: 4755ms
+
+-----------------------------------------------------------------------
+Test Results @ http://localhost:8080/wrk2-api/home-timeline/read 
+  Thread Stats   Avg      Stdev     99%   +/- Stdev
+    Latency     6.99s     6.57s   28.11s    59.58%
+    Req/Sec   133.50      8.14   148.00     71.05%
+  Latency Distribution (HdrHistogram - Recorded Latency)
+ 50.000%    6.15s 
+ 75.000%   10.42s 
+ 90.000%   15.99s 
+ 99.000%   28.11s 
+ 99.900%   30.72s 
+ 99.990%   31.93s 
+ 99.999%   32.28s 
+100.000%   32.28s 
+
+  Detailed Percentile spectrum:
+       Value   Percentile   TotalCount 1/(1-Percentile)
+
+      16.223     0.000000            1         1.00
+     100.543     0.100000         2668         1.11
+     231.935     0.200000         5332         1.25
+    1635.327     0.300000         7998         1.43
+    4116.479     0.400000        10666         1.67
+    6152.191     0.500000        13328         2.00
+    7147.519     0.550000        14664         2.22
+    7958.527     0.600000        15993         2.50
+    8593.407     0.650000        17333         2.86
+    9461.759     0.700000        18667         3.33
+   10420.223     0.750000        19998         4.00
+   11051.007     0.775000        20669         4.44
+   11829.247     0.800000        21329         5.00
+   12705.791     0.825000        21995         5.71
+   13565.951     0.850000        22657         6.67
+   14794.751     0.875000        23324         8.00
+   15351.807     0.887500        23658         8.89
+   15990.783     0.900000        23992        10.00
+   16637.951     0.912500        24323        11.43
+   17334.271     0.925000        24656        13.33
+   18399.231     0.937500        24995        16.00
+   19070.975     0.943750        25160        17.78
+   19775.487     0.950000        25324        20.00
+   20365.311     0.956250        25490        22.86
+   21217.279     0.962500        25657        26.67
+   22134.783     0.968750        25823        32.00
+   22773.759     0.971875        25907        35.56
+   23674.879     0.975000        25990        40.00
+   24575.999     0.978125        26072        45.71
+   25722.879     0.981250        26156        53.33
+   26623.999     0.984375        26240        64.00
+   27115.519     0.985938        26282        71.11
+   27361.279     0.987500        26323        80.00
+   27918.335     0.989062        26365        91.43
+   28262.399     0.990625        26407       106.67
+   28606.463     0.992188        26448       128.00
+   28835.839     0.992969        26473       142.22
+   28966.911     0.993750        26491       160.00
+   29147.135     0.994531        26511       182.86
+   29360.127     0.995313        26531       213.33
+   29605.887     0.996094        26553       256.00
+   29720.575     0.996484        26562       284.44
+   29851.647     0.996875        26573       320.00
+   29982.719     0.997266        26583       365.71
+   30113.791     0.997656        26593       426.67
+   30277.631     0.998047        26604       512.00
+   30392.319     0.998242        26610       568.89
+   30441.471     0.998437        26614       640.00
+   30556.159     0.998633        26619       731.43
+   30621.695     0.998828        26624       853.33
+   30736.383     0.999023        26629      1024.00
+   30900.223     0.999121        26633      1137.78
+   30949.375     0.999219        26635      1280.00
+   30998.527     0.999316        26637      1462.86
+   31113.215     0.999414        26640      1706.67
+   31260.671     0.999512        26642      2048.00
+   31375.359     0.999561        26644      2275.56
+   31408.127     0.999609        26645      2560.00
+   31440.895     0.999658        26646      2925.71
+   31522.815     0.999707        26648      3413.33
+   31637.503     0.999756        26649      4096.00
+   31784.959     0.999780        26650      4551.11
+   31784.959     0.999805        26650      5120.00
+   31883.263     0.999829        26651      5851.43
+   31932.415     0.999854        26652      6826.67
+   31932.415     0.999878        26652      8192.00
+   32063.487     0.999890        26653      9102.22
+   32063.487     0.999902        26653     10240.00
+   32063.487     0.999915        26653     11702.86
+   32145.407     0.999927        26654     13653.33
+   32145.407     0.999939        26654     16384.00
+   32145.407     0.999945        26654     18204.44
+   32145.407     0.999951        26654     20480.00
+   32145.407     0.999957        26654     23405.71
+   32276.479     0.999963        26655     27306.67
+   32276.479     1.000000        26655          inf
+#[Mean    =     6990.071, StdDeviation   =     6570.653]
+#[Max     =    32260.096, Total count    =        26655]
+#[Buckets =           27, SubBuckets     =         2048]
+-----------------------------------------------------------------------
+  32015 requests in 1.00m, 444.49MB read
+Requests/sec:    533.56  
+Transfer/sec:      7.41MB
+
+# docker compose ps
+NAME                                     IMAGE                                                COMMAND                  SERVICE                  CREATED        STATUS         PORTS
+socialnetwork-compose-post-service-1     deathstarbench/social-network-microservices:latest   "ComposePostService"     compose-post-service     35 hours ago   Up 5 minutes   
+socialnetwork-home-timeline-redis-1      redis                                                "docker-entrypoint.s…"   home-timeline-redis      35 hours ago   Up 5 minutes   6379/tcp
+socialnetwork-home-timeline-service-1    deathstarbench/social-network-microservices:latest   "HomeTimelineService"    home-timeline-service    35 hours ago   Up 5 minutes   
+socialnetwork-jaeger-agent-1             jaegertracing/all-in-one:1.62.0                      "/go/bin/all-in-one-…"   jaeger-agent             35 hours ago   Up 5 minutes   4317-4318/tcp, 5775/udp, 5778/tcp, 9411/tcp, 14250/tcp, 14268/tcp, 6831-6832/udp, 0.0.0.0:16686->16686/tcp, [::]:16686->16686/tcp
+socialnetwork-media-frontend-1           yg397/media-frontend:xenial                          "/usr/local/openrest…"   media-frontend           35 hours ago   Up 5 minutes   0.0.0.0:8081->8080/tcp, [::]:8081->8080/tcp
+socialnetwork-media-memcached-1          memcached                                            "docker-entrypoint.s…"   media-memcached          35 hours ago   Up 5 minutes   11211/tcp
+socialnetwork-media-mongodb-1            mongo:4.4.6                                          "docker-entrypoint.s…"   media-mongodb            35 hours ago   Up 5 minutes   27017/tcp
+socialnetwork-media-service-1            deathstarbench/social-network-microservices:latest   "MediaService"           media-service            35 hours ago   Up 5 minutes   
+socialnetwork-nginx-thrift-1             yg397/openresty-thrift:xenial                        "/usr/local/openrest…"   nginx-thrift             35 hours ago   Up 5 minutes   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+socialnetwork-post-storage-memcached-1   memcached                                            "docker-entrypoint.s…"   post-storage-memcached   35 hours ago   Up 5 minutes   11211/tcp
+socialnetwork-post-storage-mongodb-1     mongo:4.4.6                                          "docker-entrypoint.s…"   post-storage-mongodb     35 hours ago   Up 5 minutes   27017/tcp
+socialnetwork-post-storage-service-1     deathstarbench/social-network-microservices:latest   "PostStorageService"     post-storage-service     35 hours ago   Up 5 minutes   0.0.0.0:10002->9090/tcp, [::]:10002->9090/tcp
+socialnetwork-social-graph-mongodb-1     mongo:4.4.6                                          "docker-entrypoint.s…"   social-graph-mongodb     35 hours ago   Up 5 minutes   27017/tcp
+socialnetwork-social-graph-redis-1       redis                                                "docker-entrypoint.s…"   social-graph-redis       35 hours ago   Up 5 minutes   6379/tcp
+socialnetwork-social-graph-service-1     deathstarbench/social-network-microservices:latest   "SocialGraphService"     social-graph-service     35 hours ago   Up 5 minutes   
+socialnetwork-text-service-1             deathstarbench/social-network-microservices:latest   "TextService"            text-service             35 hours ago   Up 5 minutes   
+socialnetwork-unique-id-service-1        deathstarbench/social-network-microservices:latest   "UniqueIdService"        unique-id-service        35 hours ago   Up 5 minutes   
+socialnetwork-url-shorten-memcached-1    memcached                                            "docker-entrypoint.s…"   url-shorten-memcached    35 hours ago   Up 5 minutes   11211/tcp
+socialnetwork-url-shorten-mongodb-1      mongo:4.4.6                                          "docker-entrypoint.s…"   url-shorten-mongodb      35 hours ago   Up 5 minutes   27017/tcp
+socialnetwork-url-shorten-service-1      deathstarbench/social-network-microservices:latest   "UrlShortenService"      url-shorten-service      35 hours ago   Up 5 minutes   
+socialnetwork-user-memcached-1           memcached                                            "docker-entrypoint.s…"   user-memcached           35 hours ago   Up 5 minutes   11211/tcp
+socialnetwork-user-mention-service-1     deathstarbench/social-network-microservices:latest   "UserMentionService"     user-mention-service     35 hours ago   Up 5 minutes   
+socialnetwork-user-mongodb-1             mongo:4.4.6                                          "docker-entrypoint.s…"   user-mongodb             35 hours ago   Up 5 minutes   27017/tcp
+socialnetwork-user-service-1             deathstarbench/social-network-microservices:latest   "UserService"            user-service             35 hours ago   Up 5 minutes   
+socialnetwork-user-timeline-mongodb-1    mongo:4.4.6                                          "docker-entrypoint.s…"   user-timeline-mongodb    35 hours ago   Up 5 minutes   27017/tcp
+socialnetwork-user-timeline-redis-1      redis                                                "docker-entrypoint.s…"   user-timeline-redis      35 hours ago   Up 5 minutes   6379/tcp
+socialnetwork-user-timeline-service-1    deathstarbench/social-network-microservices:latest   "UserTimelineService"    user-timeline-service    35 hours ago   Up 5 minutes   

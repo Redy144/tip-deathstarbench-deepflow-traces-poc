@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
+# Run a single wrk2 baseline for a benchmark point.
+# Output: experiments/results/baseline-jaeger/<workload>_R<rate>/wrk2/run.txt (overwrites)
 
 set -euo pipefail
 
-WORKLOAD="${1}"
-RATE="${2}"
-THREADS="${3:-4}"
-CONNECTIONS="${4:-40}"
-DURATION="${5:-60}"
+WORKLOAD="${1:?workload required}"
+RATE="${2:?rate required}"
+
+THREADS="${THREADS:-4}"
+CONNECTIONS="${CONNECTIONS:-40}"
+DURATION="${DURATION:-60}"
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 SOCIAL_DIR="$ROOT_DIR/DeathStarBench/socialNetwork"
-OUT_DIR="$ROOT_DIR/experiments/results/baseline-jaeger/raw"
-
-mkdir -p "$OUT_DIR"
+RESULTS_DIR="$ROOT_DIR/experiments/results/baseline-jaeger"
 
 case "$WORKLOAD" in
   compose-post)
@@ -30,8 +31,12 @@ case "$WORKLOAD" in
     ;;
 esac
 
+POINT_DIR="$RESULTS_DIR/${WORKLOAD}_R${RATE}"
+OUT_DIR="$POINT_DIR/wrk2"
+OUT_FILE="$OUT_DIR/run.txt"
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
-OUT_FILE="$OUT_DIR/${TIMESTAMP}_${WORKLOAD}_R${RATE}_t${THREADS}_c${CONNECTIONS}_d${DURATION}.txt"
+
+mkdir -p "$OUT_DIR"
 
 cd "$SOCIAL_DIR"
 
