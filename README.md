@@ -77,6 +77,7 @@ Document findings in `docs/traces/<workload>_R<rate>.md`.
 - [Per-workload trace inspection](docs/traces/)
 - [Jaeger findings](docs/jaeger-findings.md)
 - [Comparison methodology (Jaeger vs DeepFlow)](docs/comparison-methodology.md)
+- [Trying out the DeepTrace](docs/trying_out_deeptrace.md)
 
 ## Stop the stack
 
