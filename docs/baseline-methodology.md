@@ -1,5 +1,9 @@
 # Baseline methodology
 
+This document covers the **Jaeger baseline** — the only tracing method
+successfully integrated in this PoC. See [project-summary.md](project-summary.md)
+for the full evaluation context.
+
 This document is the single source of truth for benchmark points, wrk2 runs, and manual Jaeger trace export.
 
 ## Environment
@@ -123,17 +127,8 @@ experiments/results/baseline-jaeger/
 └── read-home-timeline_R700/
 ```
 
-## Current conclusions (2026-06-24 runs)
+## Results and interpretation
 
-| Workload | R | Requests/sec | p50 | p99 |
-| --- | ---: | ---: | --- | --- |
-| compose-post | 500 | 499.00 | 10.38 ms | 33.89 ms |
-| compose-post | 1000 | 729.56 | 8.95 s | 17.15 s |
-| read-home-timeline | 600 | 541.59 | 1.08 s | 14.84 s |
-| read-home-timeline | 700 | 533.56 | 6.15 s | 28.11 s |
-
-`compose-post` meets the target rate at R=500. At R=1000 the system saturates: throughput falls short of 1000 req/s and wrk2 latency reaches seconds.
-
-`read-home-timeline` does not reach its target rates at R=600 or R=700 in these runs. Tail latency is high in wrk2 while individual Jaeger traces remain much faster — see [jaeger-findings.md](jaeger-findings.md).
-
-Trace-level conclusions: [docs/traces/](traces/) and [jaeger-findings.md](jaeger-findings.md).
+This file defines how the baseline was collected. The cross-workload results
+and interpretation are maintained in [jaeger-findings.md](jaeger-findings.md).
+Per-workload notes live in [docs/traces/](traces/).
