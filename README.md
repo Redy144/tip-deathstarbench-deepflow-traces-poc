@@ -1,17 +1,19 @@
 # tip-deathstarbench-deepflow-traces-poc
 
-Proof-of-concept repository for new methods of collecting and analysing
-distributed traces in distributed applications.
+Proof-of-concept for evaluating distributed tracing methods on DeathStarBench
+Social Network.
 
-DeathStarBench Social Network is the benchmark. Jaeger is the current tracing
-baseline. DeepFlow comparison is planned for a later phase.
+Jaeger instrumentation tracing is the **completed baseline**. DeepFlow and
+DeepTrace were evaluated as alternative approaches but **could not be
+integrated** in this environment. See [docs/project-summary.md](docs/project-summary.md)
+for the full evaluation narrative and conclusions.
 
 ## Repository layout
 
 ```text
 .
 ├── DeathStarBench/          # pinned submodule (Social Network + wrk2)
-├── docs/                    # methodology and manual trace inspection notes
+├── docs/                    # methodology, findings, and evaluation notes
 ├── experiments/
 │   ├── scripts/             # run_wrk2_baseline.sh only
 │   └── results/baseline-jaeger/
@@ -73,11 +75,10 @@ Document findings in `docs/traces/<workload>_R<rate>.md`.
 
 ## Documentation
 
+- [Project summary](docs/project-summary.md) — goal, evaluation path, conclusions
 - [Baseline methodology](docs/baseline-methodology.md) — benchmark points, wrk2, manual Jaeger export
-- [Per-workload trace inspection](docs/traces/)
-- [Jaeger findings](docs/jaeger-findings.md)
-- [Comparison methodology (Jaeger vs DeepFlow)](docs/comparison-methodology.md)
-- [Trying out the DeepTrace](docs/trying_out_deeptrace.md)
+- [Jaeger findings](docs/jaeger-findings.md) — cross-workload synthesis and links to per-workload trace docs
+- [DeepTrace evaluation log](docs/trying_out_deeptrace.md)
 
 ## Stop the stack
 
@@ -88,13 +89,7 @@ docker compose down
 
 ## Current status
 
-- wrk2 baseline: one `run.txt` per benchmark point (2026-06-24 runs)
-- Jaeger traces: 3 JSON files per point in `*/traces/` (shortest, median, longest)
-- `docs/traces/`: filled in with wrk2 metrics and trace interpretation
-- `docs/jaeger-findings.md`: cross-workload synthesis
-
-## Next steps
-
-1. Integrate DeepFlow and repeat the same four benchmark points
-2. Compare Jaeger vs DeepFlow using [comparison-methodology.md](docs/comparison-methodology.md)
-
+- **Jaeger baseline:** wrk2 results and 3 trace JSON files per benchmark point (2026-06-24 runs)
+- **Jaeger analysis:** per-workload docs in `docs/traces/` and synthesis in `docs/jaeger-findings.md`
+- **DeepFlow:** not integrated (Docker Compose vs K8s infrastructure conflict)
+- **DeepTrace:** not integrated (immature tooling; see evaluation log)

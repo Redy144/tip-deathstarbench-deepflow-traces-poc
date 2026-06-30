@@ -6,7 +6,7 @@ Methodology: [baseline-methodology.md](baseline-methodology.md)
 
 Runs collected: 2026-06-24 (sequential wrk2 + immediate Jaeger export per point).
 
-## Benchmark points
+## Quick links
 
 | Workload | R | wrk2 result | Trace inspection |
 | --- | ---: | --- | --- |
@@ -14,6 +14,12 @@ Runs collected: 2026-06-24 (sequential wrk2 + immediate Jaeger export per point)
 | compose-post | 1000 | `.../compose-post_R1000/wrk2/run.txt` | [compose-post_R1000.md](traces/compose-post_R1000.md) |
 | read-home-timeline | 600 | `.../read-home-timeline_R600/wrk2/run.txt` | [read-home-timeline_R600.md](traces/read-home-timeline_R600.md) |
 | read-home-timeline | 700 | `.../read-home-timeline_R700/wrk2/run.txt` | [read-home-timeline_R700.md](traces/read-home-timeline_R700.md) |
+
+Trace JSON files are stored in:
+
+```text
+experiments/results/baseline-jaeger/<workload>_R<rate>/traces/
+```
 
 ## Summary table
 
@@ -51,8 +57,13 @@ This gap indicates queueing and contention under sustained load — visible in w
 - Explaining multi-second wrk2 latency from a few hand-picked traces
 - Aggregating patterns across thousands of requests without tooling
 - Separating nginx queueing time from backend service time in client spans
-- Observing behavior outside instrumented code paths (motivation for DeepFlow)
+- Observing behavior outside instrumented code paths — one motivation for
+  exploring eBPF / zero-instrumentation tools (see [project-summary.md](project-summary.md))
 
-## Implications for DeepFlow comparison
+## Context within the PoC
 
-See [comparison-methodology.md](comparison-methodology.md). Use the same four benchmark points and the same manual trace selection criteria (shortest / median / longest, HTTP 200) when DeepFlow is added. Compare both per-trace structure and aggregate wrk2 metrics — they answer different questions.
+Alternative tracing methods (DeepFlow, DeepTrace) were not integrated in this
+PoC. The Jaeger findings above represent the only complete tracing dataset
+collected. See [project-summary.md](project-summary.md) for why those
+alternatives could not be evaluated and what that implies for the stability of
+new tracing approaches.
