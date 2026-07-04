@@ -21,7 +21,7 @@ GET `/wrk2-api/home-timeline/read` at R=600. Stable read workload.
 | p99 | 14.84 s |
 | Timeouts | 0 |
 
-Throughput is below the 600 req/s target. wrk2 latency is high despite individual Jaeger traces completing in tens to low hundreds of milliseconds — indicating client-side queueing under sustained load rather than slow single-request backend paths.
+Throughput is below the 600 req/s target. R=600 is the lower read bracket in this design; saturation effects (high wrk2 p50, queueing) appear even before R=700. Runs were sequential with a stack restart before read benchmarks (see methodology). wrk2 latency is high despite individual Jaeger traces completing in tens to low hundreds of milliseconds — indicating client-side queueing under sustained fixed-rate load rather than multi-second single-request backend paths (see also [jaeger-findings.md](../jaeger-findings.md) on the wrk2 vs Jaeger gap).
 
 ## Selected traces
 
