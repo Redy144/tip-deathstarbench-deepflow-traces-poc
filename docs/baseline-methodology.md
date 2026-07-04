@@ -30,6 +30,15 @@ Default wrk2 parameters:
 | read-home-timeline | 600 | stable read | `http://localhost:8080/wrk2-api/home-timeline/read` | `/wrk2-api/home-timeline/read` |
 | read-home-timeline | 700 | boundary read | same | `/wrk2-api/home-timeline/read` |
 
+### Rate selection rationale
+
+DeathStarBench does not prescribe canonical wrk2 rates for these endpoints. This PoC uses an empirical **two-tier design**: two fixed rates per workload class (write vs read) under wrk2's `-R` model.
+
+- **Lower rate ("stable"):** moderate load. For `compose-post`, R=500 achieves target throughput (~499 req/s in results).
+- **Higher rate ("higher-load" / "boundary"):** stress probe. R=1000 write drives clear saturation (~730 req/s, multi-second p50); R=700 read pushes tail latency further while throughput stays flat (~534 req/s).
+
+For read workloads, the system does not fully hit target rates even at R=600. The "stable" label reflects the lower bracket of the design, not an achieved steady-state.
+
 ## Prerequisites
 
 1. Social Network stack running (`docker compose up -d` in `DeathStarBench/socialNetwork`)
@@ -82,13 +91,16 @@ Export traces **immediately after** the wrk2 run for that benchmark point, while
 
 For each benchmark point, pick three successful requests (HTTP 200) for the operation listed in the table above:
 
+1. In Jaeger UI, search service `nginx-web-server` and the workload operation; filter HTTP 200.
+2. Compare total trace durations in the result list.
+3. Export the shortest and longest traces (min and max duration among successful traces).
+4. Export a **median** trace: pick one whose total duration falls near the middle of the observed range (manual eyeball; not wrk2 p50).
+
 | File | Criterion | How to choose |
 | --- | --- | --- |
 | `trace_01_shortest.json` | shortest | lowest total duration among successful traces |
-| `trace_02_median.json` | median / typical | duration close to the middle of observed traces |
+| `trace_02_median.json` | median / typical | duration near the middle of observed traces (illustrative, not a load-test percentile) |
 | `trace_03_longest.json` | longest | highest total duration among successful traces |
-
-In Jaeger UI: search by service `nginx-web-server` and the operation for that workload. Sort or compare durations manually.
 
 ### Where to save
 
@@ -126,6 +138,8 @@ experiments/results/baseline-jaeger/
 ├── read-home-timeline_R600/
 └── read-home-timeline_R700/
 ```
+
+All wrk2 `run.txt` files and 12 trace JSON exports from the 2026-06-24 runs are committed under `experiments/results/baseline-jaeger/`.
 
 ## Results and interpretation
 

@@ -15,7 +15,7 @@ Runs collected: 2026-06-24 (sequential wrk2 + immediate Jaeger export per point)
 | read-home-timeline | 600 | `.../read-home-timeline_R600/wrk2/run.txt` | [read-home-timeline_R600.md](traces/read-home-timeline_R600.md) |
 | read-home-timeline | 700 | `.../read-home-timeline_R700/wrk2/run.txt` | [read-home-timeline_R700.md](traces/read-home-timeline_R700.md) |
 
-Trace JSON files are stored in:
+Trace JSON files are committed in the repository (12 exports under `experiments/results/baseline-jaeger/`):
 
 ```text
 experiments/results/baseline-jaeger/<workload>_R<rate>/traces/
@@ -23,12 +23,12 @@ experiments/results/baseline-jaeger/<workload>_R<rate>/traces/
 
 ## Summary table
 
-| Workload | R | Services | Spans (typical) | Main bottleneck (per-trace) | wrk2 note | Warnings |
-| --- | ---: | ---: | ---: | --- | --- | --- |
-| compose-post | 500 | 12 | 32 | compose-post orchestration; timeline writes on slow traces | On target (~499 req/s) | none |
-| compose-post | 1000 | 12 | 32 | compose-post + home-timeline Redis under load | Saturated (~730 req/s, multi-second p50) | none |
-| read-home-timeline | 600 | 3 | 7 | nginx client waiting | Below target (~542 req/s) | none |
-| read-home-timeline | 700 | 3 | 7 | nginx client waiting | Below target (~534 req/s), high tail | none |
+| Workload | R | Services | Spans (typical) | Main bottleneck (per-trace) | wrk2 note |
+| --- | ---: | ---: | ---: | --- | --- |
+| compose-post | 500 | 12 | 32 | compose-post orchestration; timeline writes on slow traces | On target (~499 req/s) |
+| compose-post | 1000 | 12 | 32 | compose-post + home-timeline Redis under load | Saturated (~730 req/s, multi-second p50) |
+| read-home-timeline | 600 | 3 | 7 | nginx client waiting | Below target (~542 req/s) |
+| read-home-timeline | 700 | 3 | 7 | nginx client waiting | Below target (~534 req/s), high tail |
 
 ## Write vs read workloads
 
