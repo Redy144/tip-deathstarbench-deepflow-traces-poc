@@ -26,7 +26,7 @@ for the full evaluation narrative and conclusions.
 
 Pinned submodule commit: `4fba28cb3b454259d005794608c5204cf8aef461`
 
-Fork: [https://github.com/Redor144/DeathStarBench.git](https://github.com/Redor144/DeathStarBench.git) (Jaeger all-in-one pinned to 1.62.0)
+Fork: [https://github.com/Redor144/DeathStarBench.git](https://github.com/Redy144/DeathStarBench.git) (Jaeger all-in-one pinned to 1.62.0)
 
 ## Requirements
 
