@@ -39,7 +39,7 @@ This report answers in two parts: instrumentation-based tracing (Jaeger) works r
 
 ### 1.4 Report structure
 
-Section 2 introduces background and related work. Section 3 describes the environment and setup. Section 4 defines the Jaeger baseline methodology. Section 5 documents the evaluation of all three tracing approaches. Section 6 presents Jaeger results for each benchmark point. Section 7 discusses findings and limitations. Section 8 states conclusions. References and an appendix follow.
+Section 2 introduces background and related work. Section 3 describes the environment and setup. Section 4 defines the Jaeger baseline methodology. Section 5 documents the evaluation of all three tracing approaches. Section 6 presents Jaeger results for each benchmark point. Section 7 discusses findings and limitations. Section 8 states conclusions. Section 9 presents a 4Ls project retrospective. References and an appendix follow.
 
 ---
 
@@ -565,7 +565,53 @@ flowchart LR
 
 ---
 
-## 9. References
+## 9. 4Ls project retrospective
+
+The **4Ls retrospective** is a structured end-of-project reflection framework used in Agile and Scrum teams. The four Ls stand for **Liked**, **Learned**, **Lacked**, and **Longed For**. This section complements the technical conclusions in Section 8 by reflecting on how the PoC was conducted and what the experience suggests for future observability evaluations. It is distinct from the tool-level retrospective comparison in Section 2.3.
+
+| L | Summary |
+| --- | --- |
+| **Liked** | Jaeger baseline complete; reproducible methodology; wrk2–Jaeger insight; honest negative results |
+| **Learned** | Jaeger mature; infra fit first; research tools risky; aggregate ≠ per-trace under load |
+| **Lacked** | Zero-instrumentation data; K8s; automation; failed-request traces; network visibility |
+| **Longed For** | K8s for DeepFlow; mature zero-instrumentation tool; automated trace–load correlation |
+
+### 9.1 Liked
+
+- **Jaeger baseline delivered end-to-end:** four wrk2 benchmark points, 12 trace JSON exports, and per-workload and cross-workload analysis (Section 6).
+- **DeathStarBench on Docker Compose proved a stable evaluation environment** for instrumentation-based tracing without additional infrastructure.
+- **Clear methodological insight:** the wrk2 aggregate vs Jaeger per-trace latency distinction (Section 4.4) is a substantive finding, not merely a side effect of a failed experiment.
+- **Honest evaluation narrative:** DeepFlow and DeepTrace failures were documented with evidence (screenshots, attempt logs) rather than omitting the research question.
+- **Reproducible artifacts:** committed `run.txt` files, trace JSON exports, a pinned submodule commit, and documented wrk2 parameters.
+
+### 9.2 Learned
+
+- **Instrumentation-based tracing (Jaeger) is mature** in this stack; service topology and per-span latency are reliable across write and read workloads.
+- **Infrastructure fit matters before tool depth:** DeepFlow was ruled out by official Docker Compose guidance — evaluating deployment constraints first would have reduced time spent on DeepTrace.
+- **Research prototypes carry high integration risk:** DeepTrace required local patches, had documentation gaps, and produced no traces despite extensive effort (Section 5.2).
+- **Load-test metrics and trace data measure different things** under saturation; hand-picked Jaeger traces cannot explain multi-second wrk2 percentiles alone.
+- **Sequential benchmark design has validity trade-offs:** stack restarts and run order affect cross-point comparability (Section 7.5).
+
+### 9.3 Lacked
+
+- **No zero-instrumentation tracing dataset:** neither DeepFlow nor DeepTrace produced usable traces.
+- **No Kubernetes environment** for a fair DeepFlow server deployment.
+- **No automated trace export or sampling pipeline** — manual Jaeger UI selection only (Section 4.3).
+- **No representation of failed or timed-out requests** in the trace set (HTTP 200 filter).
+- **No statistical trace sample** — three hand-picked traces per point cannot represent latency distributions.
+- **No network-level observability** to separate nginx queueing from backend or container-network delay.
+
+### 9.4 Longed For
+
+- **Kubernetes (or equivalent) infrastructure** to evaluate DeepFlow on equal footing with Jaeger.
+- **A mature zero-instrumentation tool** with reliable documentation and reproducible setup (e.g. Zerotrace — named but not evaluated).
+- **Automated correlation** between wrk2 latency percentiles and trace selection, or continuous trace sampling during load tests.
+- **Earlier go/no-go on tool infrastructure fit** before investing extended time in DeepTrace troubleshooting.
+- **Complementary observability** (eBPF / network flows) to explain the wrk2–Jaeger latency gap identified in Section 7.2.
+
+---
+
+## 10. References
 
 | Resource                             | URL                                                                                                                        |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |

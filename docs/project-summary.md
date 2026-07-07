@@ -122,6 +122,25 @@ complete dataset in the PoC.
 | Latency attribution | per-span durations | not evaluated | not evaluated |
 | Operational overhead | already present in DSB | agent + separate server deploy | agent + server + Elasticsearch |
 
+## 4Ls retrospective
+
+Structured end-of-project reflection (Liked, Learned, Lacked, Longed For). Full detail is in [REPORT.md](../REPORT.md) Section 9.
+
+| L | Summary |
+| --- | --- |
+| **Liked** | Jaeger baseline complete; reproducible methodology; wrk2–Jaeger insight; honest negative results |
+| **Learned** | Jaeger mature; infra fit first; research tools risky; aggregate ≠ per-trace under load |
+| **Lacked** | Zero-instrumentation data; K8s; automation; failed-request traces; network visibility |
+| **Longed For** | K8s for DeepFlow; mature zero-instrumentation tool; automated trace–load correlation |
+
+**Liked:** Jaeger delivered wrk2 results, 12 trace exports, and written analysis across all benchmark points. DeathStarBench on Docker Compose worked reliably. The wrk2 vs Jaeger latency gap is a substantive methodological finding.
+
+**Learned:** Jaeger is production-ready here; infrastructure fit should be checked before deep tool integration; research prototypes (DeepTrace) are high-risk; aggregate load-test metrics and per-trace durations diverge under saturation.
+
+**Lacked:** No zero-instrumentation traces; no Kubernetes for DeepFlow; manual trace export only; no failed-request or statistical trace samples; no network-level observability.
+
+**Longed For:** Kubernetes for DeepFlow; a mature zero-instrumentation alternative; automated trace–load correlation; earlier go/no-go on tool fit; eBPF/network observability to explain queueing.
+
 ## Conclusions
 
 1. **Jaeger (instrumentation-based tracing) is production-ready** in this

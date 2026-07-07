@@ -75,6 +75,7 @@ Document findings in `docs/traces/<workload>_R<rate>.md`.
 
 ## Documentation
 
+- [REPORT.md](REPORT.md) — full PoC report (includes 4Ls project retrospective)
 - [Project summary](docs/project-summary.md) — goal, evaluation path, conclusions
 - [Baseline methodology](docs/baseline-methodology.md) — benchmark points, wrk2, manual Jaeger export
 - [Jaeger findings](docs/jaeger-findings.md) — cross-workload synthesis and links to per-workload trace docs
